@@ -7,7 +7,7 @@
       	font: 10px sans-serif;
       	background-color: steelblue;
       	text-align: right;
-      	padding: 3px;
+      	/*padding: 3px;*/
       	margin: 1px;
       	color: white;
       }
@@ -15,13 +15,49 @@
   </head>
   <body>
     <div class="chart">
-      <div style="width: 40px;">4</div>
+      <!-- <div style="width: 40px;">4</div>
       <div style="width: 80px;">8</div>
       <div style="width: 150px;">15</div>
       <div style="width: 160px;">16</div>
       <div style="width: 230px;">23</div>
-      <div style="width: 420px;">42</div>
+      <div style="width: 420px;">42</div> -->
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+    <script>
+            // to make it responsive, use scale, allows us to map values of 0-42 to 0-100, 42 becomes full width of the screen or corresponds to percentage width of parent container
+      var linearScale = d3.scale.linear()
+                          .domain([0, 42])
+                          // 100%, 80% of page
+                          .range([0, 80])
+      // wanna get this data out of the code
+      var lottoNums =[4, 8, 15, 16, 23, 42]
+      d3.select(".chart")
+        // weird cus we deleted the divs, select all div
+        .selectAll("div")
+
+        .data(lottoNums)
+        // select all elements that don't exist yet, we got 6 data, but don't have divs, enter sudo sub selects divs that don't exist. we gotta append divs, yet to be mapped
+        .enter()
+        .append("div")
+        .style("width", "0px")
+        .transition()
+          // i is index, we say the delay will be 1 sec, 2, sec,
+
+          .delay(function(d, i) {return i*500})
+          // how long is this transition
+          .duration(2000)
+          .style("width", function(d){
+            // to make it responsive, use scale
+            // return d*20 + "px"
+            return linearScale(d)+ "%"
+          })
+          .style("padding-right", "3px")
+        .text(function(d){
+          // d is datum
+          return d;
+        })
+
+
+    </script>
   </body>
 </html>
